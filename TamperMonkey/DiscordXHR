@@ -1,0 +1,36 @@
+// ==UserScript==
+// @name         XHR Hooker
+// @namespace    cloudchamber
+// @version      0.1
+// @description  try to take over the world!
+// @author       You
+// @match        https://discord.com/*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+    console.log('[XHR Hooker] script loaded!');
+    window.XMLHttpRequest.prototype.__open = window.XMLHttpRequest.prototype.open
+    window.XMLHttpRequest.prototype.__send = window.XMLHttpRequest.prototype.send;
+
+
+    window.XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
+        let logMessage = '[XHR OPEN]: '
+        method && (logMessage += `method: ${method}\t`)
+        url && (logMessage += `url: ${url}\t`)
+        async && (logMessage += `async: ${async}\t`)
+        user && (logMessage += `user: ${user}\t`)
+        password && (logMessage += `password: ${password}`)
+        console.log(logMessage)
+        return this.__open(method, url, async, user, password)
+    }
+
+    window.XMLHttpRequest.prototype.send = function (body) {
+        let logMessage = '[XHR SEND]: '
+        body && (logMessage += `body: ${body}`)
+        console.log(logMessage)
+        return this.__send(body);
+    }
+})();
